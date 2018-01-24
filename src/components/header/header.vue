@@ -17,16 +17,17 @@
          <span class="supports_des">{{seller.supports[0].description}}</span>
        </div>
       </div>
-      <div class="support_count" v-if="seller.supports">
+      <div class="support_count" v-if="seller.supports" @click="changeDetail">
           <span class="count">{{seller.supports.length}}个</span>
        </div>
     </div>
-    <div class="bulletin">
+    <div class="bulletin" @click="changeDetail">
       <span class="bulletin_title"></span><span class="bulletin_text">{{seller.bulletin}}</span>
     </div>
     <div class="background">
       <img :src="seller.avatar" alt="" width="100%" height="100%">
     </div>
+    <div class="detail" v-show="detailShow"></div>
   </div>
 </template>
 <script>
@@ -38,6 +39,16 @@ export default {
   },
   created () {
     this.classMap = ['decrease','discount','special','invoice','guarantee']
+  },
+  data(){
+    return{
+      detailShow : false
+    }
+  },
+  methods: {
+     changeDetail (){
+       this.detailShow = !this.detailShow
+     }
   }
 }
 </script>
@@ -45,6 +56,7 @@ export default {
 .tab{
   font-family: 'PingFang SC', 'STHeitiSC-Light', 'Helvetica-Light', arial, sans-serif;
   position: relative;
+  overflow: hidden;
   color:#fff;
   background: rgba(7,17,27,0.5);
 }
@@ -150,7 +162,7 @@ export default {
   display: inline-block;
   height:12px;
   width:22px;
-  margin-top:7px;
+  margin-top:8px;
   background:url('imgs/bulletin@2x.png');
   background-size:22px 12px;
   background-repeat:no-repeat; 
@@ -168,6 +180,19 @@ export default {
   height:100%;
   z-index: -1;
   filter:blur(10px);
+}
+.detail{
+  position: fixed;
+  width:100%;
+  height:100%;
+  top:0;
+  bottom:0;
+  left:0;
+  right:0;
+  overflow: auto;
+  z-index: 100;
+  background: rgba(7,17,27,0.8);
+  /* filter: blur(10px); */
 }
 @media screen and(-webkit-min-device-pixel-ratioa:3){
   .seller_logo{
