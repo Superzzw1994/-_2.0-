@@ -44,11 +44,45 @@
     </div>
     <!--  -->
     <!-- 弹出详情页开始 -->
-    <div class="detail" v-show="detailShow"></div>
+    <transition name="fade">
+    <div class="detail" v-show="detailShow">
+      <div class="detail-wrapper clearfix">
+       <div class="detail-main">
+        <h1>{{seller.name}}</h1>
+        <div class="star-wrapper">
+          <star v-if="seller.score" :score="seller.score" :size="48"></star>
+        </div>
+        <div class="detail-title">
+          <div class="line"></div>
+          <div class="text">优惠信息</div>
+          <div class="line"></div>
+        </div>
+        <ul v-if="seller.supports" class="_supports">
+          <li v-for="(item,index) in seller.supports" class="supports-item">
+            <span :class="classMap[item.type]"  class="_icon"></span>
+            <span class="_text">{{item.description}}</span>
+          </li>
+        </ul>
+        <div class="detail-title">
+          <div class="line"></div>
+          <div class="text">商家公告</div>
+          <div class="line"></div>
+        </div>
+        <div class="detail-bulletin">
+          <p>{{seller.bulletin}}</p>
+          </div> 
+       </div>
+      </div>
+      <div class="detail-closeBtn" @click="changeDetail">
+          X
+      </div>
+    </div>
+    </transition>
     <!---->
   </div>
 </template>
 <script>
+import star from '../star/star'
 export default {
   props:{
     //接收父组件参数(数据) seller
@@ -59,6 +93,9 @@ export default {
   created () {
     // 创建映射
     this.classMap = ['decrease','discount','special','invoice','guarantee']
+  },
+  components: {
+    star:star
   },
   data(){
     return{
@@ -75,6 +112,18 @@ export default {
 }
 </script>
 <style scoped>
+.clearfix { 
+  *zoom: 1; 
+} 
+.clearfix:before, 
+.clearfix:after { 
+  display: table; 
+  line-height: 0; 
+  content: ""; 
+}  
+.clearfix:after { 
+  clear: both; 
+} 
 /* 根元素样式 */
 .tab{
   font-family: 'PingFang SC', 'STHeitiSC-Light', 'Helvetica-Light', arial, sans-serif;
@@ -226,7 +275,93 @@ export default {
   overflow: auto;
   z-index: 100;
   background: rgba(7,17,27,0.8);
-  /* filter: blur(10px); */
+  -webkit-backdrop-filter: blur(10px);
+  transition: all 0.5s;
+}
+/* detail内容详情页 */
+.detail-wrapper{
+  min-height:100%;
+  width:100%;
+}
+.detail-main{
+  margin-top:64px;
+  padding-bottom:64px;
+}
+.detail-main h1{
+  font-size: 16px;
+  line-height: 16px;
+  font-weight: 700;
+  color:rgb(255,255,255);
+  text-align: center;
+}
+/* detail关闭按钮 */
+.detail-closeBtn{
+  position: relative;
+  width: 32px;
+  height: 32px;
+  margin: -64px auto;
+  clear: both;
+  font-size:32px;
+}
+/* 星星组件样式 */
+.star-wrapper{
+  margin-top:18px;
+  padding:2px 0;
+  text-align: center;
+}
+/* 自适应下划线 */
+.detail-title{
+  width:80%;
+  margin:28px auto 24px;
+  display: flex; 
+}
+.line{
+  flex:1;
+  position: relative;
+  top:-6px;
+  border-bottom:1px solid rgba(255,255,255,0.2)
+}
+.text{
+ padding: 0 12px;
+ font-size:14px;
+ font-weight: 700;
+ vertical-align: top;
+}
+/* 商品简介遍历排列 */
+._supports{
+  width: 80%;
+  margin: 0 auto;
+}
+.supports-item{
+  padding: 0 12px;
+  margin-bottom: 12px;
+  font-size: 0;
+}
+.supports .supports-item:last-child{
+  margin-bottom: 0;
+}
+.supports-item ._icon{
+  vertical-align:top;
+  display:inline-block;
+  height:16px;
+  width:16px;
+  margin-right: 6px;
+  background-repeat: no-repeat;
+  background-size: 16px 16px;
+}
+.supports-item ._text{
+  line-height: 16px;
+  font-size: 12px;
+}
+/* detail商家公告 */
+.detail-bulletin{
+  width:80%;
+  margin: 0 auto;
+}
+.detail-bulletin p{
+  padding: 0 12px;
+  line-height: 24px;
+  font-size: 12px;
 }
 /* 媒体查询，不同dpr显示不同图片 */
 @media screen and(-webkit-min-device-pixel-ratioa:3){
@@ -248,5 +383,19 @@ export default {
 .guarantee{
   background: url('imgs/guarantee_1@3x.png');
 }
+}
+/* 动画效果(detail层渐变) */
+.fade-enter {
+  opacity:0;
+}
+.fade-leave{
+  opacity:1;
+}
+.fade-enter-active{
+  transition:opacity .5s;
+}
+.fade-leave-active{
+  opacity:0;
+  transition:opacity .5s;
 }
 </style>
