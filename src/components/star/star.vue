@@ -18,10 +18,6 @@ export default {
           type:Number
       }
   },
-  created () {
-    console.log(this.size)  
-    console.log(this.score)
-  },
   computed: {
       starType (){
           return "star-" + this.size
@@ -30,9 +26,7 @@ export default {
           let arr = [];
           let score = Math.floor(this.score*2)/2;
           let hasDecimal = score%1 !== 0;
-          console.log(hasDecimal)
           let integer = Math.floor(score);
-          console.log(integer)
           for(let i = 0 ;i < integer;i++){
               arr.push(CLS_ON);
           }

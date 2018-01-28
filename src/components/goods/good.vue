@@ -31,21 +31,32 @@
                       <span class="content-newPrice">￥{{food.price}}</span>
                        <span v-show="food.oldPrice" class="content-oldPrice">￥{{food.oldPrice}}</span>
                     </div>
+                    <div class="cartcontorlWrapper">
+                      <cartcontrol :food="item.foods"></cartcontrol>
+                    </div>
                   </div>
+                
               </li>
             </ul>             
           </li>
         </ul>
       </div>
+      <cart :seller="seller"></cart>
   </div>
 </template>
 <script>
 import BScroll from 'better-scroll'
+import cart from '../cart/cart'
+import cartcontrol from '../cartcontrol/cartcontrol'
 export default {
   props: {
     seller: {
       type: Object
     }
+  },
+  components: {
+    cart:cart,
+    cartcontrol:cartcontrol
   },
   data() {
     return {
@@ -60,7 +71,7 @@ export default {
         let topLimit = this.Height[i];
         let bottomLimit = this.Height[i + 1];
         if((this.scrollY >= topLimit && this.scrollY < bottomLimit)){
-          console.log(i)
+          // console.log(i)
           return i;
         } 
       }
@@ -78,7 +89,8 @@ export default {
         click:true
       })
       this.foodScoll = new BScroll(this.$refs.foodsWrapper,{
-        probeType:3
+        probeType:3,
+        click:true
       });
       this.foodScoll.on('scroll',(pos)  => {
         this.scrollY = Math.abs(Math.round(pos.y));
@@ -189,6 +201,7 @@ export default {
 }
 .food-content{
   display: flex;
+  position: relative;
   margin:18px;
   padding-bottom:18px; 
   font-size:0;
@@ -205,7 +218,7 @@ export default {
   margin-right:10px;
 }
 .right-content{
-  display: inline-block;
+  flex:1;
 }
 .content-title{
   font-size:14px;
@@ -242,5 +255,10 @@ export default {
   text-decoration: line-through;
   font-size: 10px;
   color: #93999f;
+}
+.cartcontorlWrapper{
+  position: absolute;
+  right:0;
+  bottom: 18px;
 }
 </style>

@@ -3,7 +3,7 @@
     <Header :seller="data"></Header>
     <tab></tab>
     <transition name="fade" mode="out-in">
-        <router-view></router-view>
+        <router-view :seller="data"></router-view>
     </transition> 
   </div>
 </template>
